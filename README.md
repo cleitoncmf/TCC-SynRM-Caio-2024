@@ -4,8 +4,10 @@ Repositório contendo o material produzido no projeto de graduação "Estudo de 
 
 ## Dados do Trabalho
 
-**Instituição:** 
+**Instituição:**
+
 [Universidade do Estado do Rio de Janeiro](https://www.uerj.br/) 
+
 [Departamento de Engenharia Elétrica](http://www.ele.eng.uerj.br/)
 
 
