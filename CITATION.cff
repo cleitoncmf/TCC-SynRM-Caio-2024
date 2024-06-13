@@ -1,0 +1,13 @@
+cff-version: 0.2
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Magalhães Freitas"
+  given-names: "Cleiton"
+  orcid: "https://orcid.org/0000-0002-6300-0521"
+- family-names: "da Trindade Graciano"
+  given-names: "Caio Alexandre"
+title: "TCC-SynRM-Caio-2024: Estudo de um motor de relutância síncrona pelo método dos elementos finitos"
+version: 0.2
+doi: 10.5281/zenodo.11640862
+date-released: 2024-06-13
+url: "https://github.com/cleitoncmf/TCC-SynRM-Caio-2024/tree/v0.1"
