@@ -6,8 +6,7 @@ Repositório contendo o material produzido no projeto de graduação "Estudo de 
 
 **Instituição:**
 
-[Universidade do Estado do Rio de Janeiro](https://www.uerj.br/) 
-
+[Universidade do Estado do Rio de Janeiro](https://www.uerj.br/) <n>
 [Departamento de Engenharia Elétrica](http://www.ele.eng.uerj.br/)
 
 
