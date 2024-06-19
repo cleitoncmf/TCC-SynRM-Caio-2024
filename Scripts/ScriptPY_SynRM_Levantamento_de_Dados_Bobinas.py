@@ -9,6 +9,8 @@ nome_tabela_ref = "Corrente_8A_delta25.csv"
 femm.openfemm()
 femm.opendocument(nome_do_arquivo)
 
+#Função para iterar sobre uma coluna, encontrar um valor específico 
+#e retornar uma dado de outra coluna na mesma linha
 def buscar_valor(csv_file, coluna_busca, valor_busca, coluna_retorno):
     with open(csv_file, 'r') as arquivo_csv:
         leitor_csv = csv.reader(arquivo_csv)
@@ -41,15 +43,15 @@ with open(f, 'w', newline='') as arquivo_csv:
 delta_angulo = 5
 cont=0
 
-#Setando valores iniciais de corrente para calcular indutancias proprias
-#Para funcionar, transforme as bobinas que estão em zero em comentarios no loop.
+#Se for coletar dados para corrente continua, especificar as correntes abaixo
+#Para funcionar, comente os modificadores de corrente dentro do for loop
 femm.mi_modifycircprop("BobinaEstatorA",1,0)
 femm.mi_modifycircprop("BobinaEstatorB",1,0)
 femm.mi_modifycircprop("BobinaEstatorC",1,0)
 
 #Repetição para girar o rotor e computar os resultados
 for angulo in range(0,366-delta_angulo,delta_angulo):
-    #'Setando' os valores de corrente de acordo com o CSV, as variáveis dos circuitos são interpretadas em strings
+    #'Setando' os valores de corrente de acordo com o CSV de referencia, as variáveis dos circuitos são interpretadas em strings
     femm.mi_modifycircprop("BobinaEstatorA",1,buscar_valor(nome_tabela_ref,4,str(angulo),1))
     femm.mi_modifycircprop("BobinaEstatorB",1,buscar_valor(nome_tabela_ref,4,str(angulo),2))
     femm.mi_modifycircprop("BobinaEstatorC",1,buscar_valor(nome_tabela_ref,4,str(angulo),3)) 
@@ -62,21 +64,24 @@ for angulo in range(0,366-delta_angulo,delta_angulo):
 
     #Mostra o resultado da simulacao
     femm.mi_loadsolution()
+    
     #Mostra a densidade de fluxo
     #Se habilitou a apresentação da solução e quiser mostar a densidade de fluxo
     #Fica muito mais lento
-    femm.mo_showdensityplot(0,0,1.6,10**-8,"bmag")
+    #femm.mo_showdensityplot(0,0,1.6,10**-8,"bmag")
+    
     #Salva o print do resultado (posição inicial)
     #Se quiser salvar um print de cada imagem, descomente
     #Fica mais lento
-    nome_da_figura = ".figs\posicao_",angulo,"_graus.emf"
     femm.mo_savebitmap(f'figuras\posicao_{angulo}_graus.bmp')
+    
     #Computa as variáveis das bobinas do Estator
     Corrente_estatorA,Tensao_estatorA,Fluxo_Concatenado_estatorA = femm.mo_getcircuitproperties("BobinaEstatorA")
     Corrente_estatorB,Tensao_estatorB,Fluxo_Concatenado_estatorB = femm.mo_getcircuitproperties("BobinaEstatorB")
     Corrente_estatorC,Tensao_estatorC,Fluxo_Concatenado_estatorC = femm.mo_getcircuitproperties("BobinaEstatorC")
 
-    #Grava os resultados de interesse na lista resultado
+    #Grava os resultados de interesse na lista resultado. Se qualquer das correntes for zero o programa irá dar erro
+    #Personalize a lista resultado abaixo de acordo
     resultado = [angulo,Fluxo_Concatenado_estatorA,Fluxo_Concatenado_estatorB,Fluxo_Concatenado_estatorC,Tensao_estatorA,Tensao_estatorB,Tensao_estatorC,Fluxo_Concatenado_estatorA/Corrente_estatorA,Fluxo_Concatenado_estatorB/Corrente_estatorB,Fluxo_Concatenado_estatorC/Corrente_estatorC,Tensao_estatorA/Corrente_estatorA,Tensao_estatorB/Corrente_estatorB,Tensao_estatorC/Corrente_estatorC,Tensao_estatorA*Corrente_estatorA,Tensao_estatorB*Corrente_estatorB,Tensao_estatorC*Corrente_estatorC]
     with open(f,'a', newline='') as arquivo_csv:
         #Cria um objeto escritor CSV
@@ -94,5 +99,5 @@ for angulo in range(0,366-delta_angulo,delta_angulo):
 
 #Alinhar o Rotor
 femm.mi_selectgroup(5)
-femm.mi_moverotate(0,0,-delta_angulo)
+femm.mi_moverotate(0,0,-(360-angulo))
 print("Concluído")
